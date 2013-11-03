@@ -194,6 +194,13 @@ public class ApnContext {
                                 || (mState == DctConstants.State.FAILED));
     }
 
+    public boolean isConnectedOrConnecting() {
+        return isReady() && ((mState == DctConstants.State.CONNECTED)
+                                || (mState == DctConstants.State.CONNECTING)
+                                || (mState == DctConstants.State.SCANNING)
+                                || (mState == DctConstants.State.RETRYING));
+    }
+
     public void setEnabled(boolean enabled) {
         if (DBG) {
             log("set enabled as " + enabled + ", current state is " + mDataEnabled.get());
@@ -219,7 +226,7 @@ public class ApnContext {
     public boolean isProvisioningApn() {
         String provisioningApn = mContext.getResources()
                 .getString(R.string.mobile_provisioning_apn);
-        if (mApnSetting != null) {
+        if ((mApnSetting != null) && (mApnSetting.apn != null)) {
             return (mApnSetting.apn.equals(provisioningApn));
         } else {
             return false;
